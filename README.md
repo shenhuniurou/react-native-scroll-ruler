@@ -3,11 +3,11 @@ ReactNative版滑动刻度尺,兼容Android和iOS。
 
 ## GIF
 ![](https://github.com/shenhuniurou/react-native-scroll-ruler/blob/master/scroll-ruler-ios.gif)
-![](https://github.com/shenhuniurou/react-native-scroll-ruler/blob/master/scroll-ruler-android.gif)
+![](https://github.com/shenhuniurou/react-native-scroll-ruler/blob/master/scroll-ruler-android.gif){:height="510"}
 
-# Get Started
+##  Get Started
 
-## Installation
+### Installation
 
 Step 1:
 
@@ -15,19 +15,19 @@ Step 1:
 
 or 
 
-`yarn add react-native-scroll-ruler --save`
+`yarn add react-native-scroll-ruler`
 
 Step 2:
 
-'react-native link react-native-scroll-ruler'
+`react-native link react-native-scroll-ruler`
 
 That's all!
 
-# Usage
+### Usage
 
-## Simple
+#### Simple
 
-```
+```javascript
 import RNScrollRuler from 'react-native-scroll-ruler';
 
 <RNScrollRuler 
@@ -46,7 +46,7 @@ import RNScrollRuler from 'react-native-scroll-ruler';
 ></RNScrollRuler>
 ```
 
-## Props
+#### Props
 
 |Prop|Description|Type|Required|
 |:---|:----|:---|:---|
@@ -57,13 +57,15 @@ import RNScrollRuler from 'react-native-scroll-ruler';
 |num|两个小刻度之间的数值间隔|number|Y|
 |unit|单位|string|N|
 
-## Methods
+#### Methods
 
 |Method|Description|
 |:---|:----|
 |onSelect|选中值后的回调方法|
 
 
-License
+
+
+#### License
 
 [MIT](https://github.com/shenhuniurou/react-native-scroll-ruler/blob/master/LICENSE)
