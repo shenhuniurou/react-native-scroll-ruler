@@ -1,9 +1,9 @@
 # react-native-scroll-ruler
 ReactNative版滑动刻度尺,兼容Android和iOS。
 
-## GIF
+## Gifs
 ![](https://github.com/shenhuniurou/react-native-scroll-ruler/blob/master/scroll-ruler-ios.gif)
-![](https://github.com/shenhuniurou/react-native-scroll-ruler/blob/master/scroll-ruler-android.gif){:height="510"}
+![](https://github.com/shenhuniurou/react-native-scroll-ruler/blob/master/scroll-ruler-android.gif)
 
 ##  Get Started
 
@@ -41,7 +41,23 @@ import RNScrollRuler from 'react-native-scroll-ruler';
    	unit={"kg"}
    	defaultValue={this.state.defaultWeight}
    	onSelect={(value) => {
-       	this.setState({weight: value});
+    	this.setState({weight: value});
+   	}}
+></RNScrollRuler>
+
+
+<RNScrollRuler 
+	style={{width: Util.size.width - 20, height: 100, backgroundColor: '#fff'}}
+   	ref={(view) => {
+   	}}
+   	minValue={120}
+   	maxValue={250}
+   	step={1}
+   	num={10}
+   	unit={"cm"}
+   	defaultValue={this.state.defaultHeight}
+   	onSelect={(value) => {
+    	this.setState({height: value});
    	}}
 ></RNScrollRuler>
 ```
