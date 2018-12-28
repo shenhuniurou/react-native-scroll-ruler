@@ -74,7 +74,7 @@
 @property (nonatomic,assign)NSInteger betweenNumber;
 @property (nonatomic,assign)int minValue;
 @property (nonatomic,assign)int maxValue;
-@property (nonatomic,assign)int step;
+@property (nonatomic,assign)float step;
 
 @end
 @implementation DYRulerView
@@ -94,7 +94,10 @@
     for (int i = 0; i <= _betweenNumber; i ++){
         CGContextMoveToPoint(context, startX+lineCenterX*i, topY);
         if (i%_betweenNumber == 0){
-            NSString *num = [NSString stringWithFormat:@"%d", i * _step + _minValue];
+            NSString *num = [NSString stringWithFormat:@"%d", (int)(i * _step) + _minValue];
+            if ([num isEqualToString:@"0"]) {
+                num = @"不设";
+            }
             NSDictionary *attribute = @{NSFontAttributeName:TextRulerFont, NSForegroundColorAttributeName:[UIColor lightGrayColor]};
             CGFloat width = [num boundingRectWithSize:CGSizeMake(CGFLOAT_MAX, CGFLOAT_MAX) options:0 attributes:attribute context:nil].size.width;
             [num drawInRect:CGRectMake(startX+lineCenterX*i-width/2, longLineY+10, width, 16) withAttributes:attribute];
@@ -128,11 +131,18 @@
     CGContextSetLineCap(context, kCGLineCapButt);
     
     CGContextMoveToPoint(context, rect.size.width, 0);
-    NSString *num = [NSString stringWithFormat:@"%d",_minValue];
+    
+    NSString *num;
+    if (_minValue == 0) {
+        num = @"不设";
+    } else {
+        num = [NSString stringWithFormat:@"%d", _minValue];
+    }
+    
     NSDictionary *attribute = @{NSFontAttributeName:TextRulerFont,NSForegroundColorAttributeName:[UIColor lightGrayColor]};
     CGFloat width = [num boundingRectWithSize:CGSizeMake(CGFLOAT_MAX, CGFLOAT_MAX) options:0 attributes:attribute context:nil].size.width;
     [num drawInRect:CGRectMake(rect.size.width-width/2, longLineY+10, width, 16) withAttributes:attribute];
-    CGContextAddLineToPoint(context,rect.size.width, longLineY);
+    CGContextAddLineToPoint(context, rect.size.width, longLineY);
     CGContextStrokePath(context);//开始绘制
 }
 
@@ -179,7 +189,7 @@
 @property(nonatomic, assign)int           stepNum;//分多少个区
 @property(nonatomic, assign)int           minValue;//游标的最小值
 @property(nonatomic, assign)int           maxValue;//游标的最大值
-@property(nonatomic, assign)int           step;//间隔值，每两条相隔多少值
+@property(nonatomic, assign)float           step;//间隔值，每两条相隔多少值
 @property(nonatomic, assign)NSInteger     betweenNum;
 @property(nonatomic, strong)NSString      *unit;//单位
 @property (nonatomic,assign)int defaultValue;
@@ -223,7 +233,7 @@
     self.unitLab.text = _unit;
 }
 
-- (void)setStep:(int)step {
+- (void)setStep:(float)step {
     NSLog(@"设置步长");
     [[self subviews]makeObjectsPerformSelector:@selector(removeFromSuperview)];
     _step = step;
@@ -244,7 +254,7 @@
 - (void)setDefaultValue:(int)defaultValue {
     NSLog(@"设置默认值");
     _defaultValue      = defaultValue;
-    if (_minValue != 0 && _maxValue != 0) {
+    if (_maxValue != 0) {
         [self setRealValue:defaultValue];
         [_collectionView setContentOffset:CGPointMake(((defaultValue-_minValue)/(float)_step)*RulerGap, 0) animated:YES];
     }
@@ -384,7 +394,14 @@
 }
 -(void)setRealValue:(float)realValue animated:(BOOL)animated{
     _realValue      = realValue;
-    _valueLab.text   = [NSString stringWithFormat:@"%d",_realValue*_step+_minValue];
+    int n = _realValue*_step+_minValue;
+    if (n == 0) {
+        _unitLab.hidden = YES;
+        _valueLab.text = @"不设";
+    } else {
+        _unitLab.hidden = NO;
+        _valueLab.text = [NSString stringWithFormat:@"%d", n];
+    }
     [_collectionView setContentOffset:CGPointMake((int)realValue*RulerGap, 0) animated:animated];
 }
 
@@ -479,9 +496,13 @@
         if (totalValue >= _maxValue) {
             _valueLab.text = [NSString stringWithFormat:@"%d",_maxValue];
         }else if(totalValue <= _minValue){
-            _valueLab.text = [NSString stringWithFormat:@"%d",_minValue];
+            if(_minValue == 0) {
+                _valueLab.text = @"不设";
+            } else {
+                _valueLab.text = [NSString stringWithFormat:@"%d",_minValue];
+            }
         }else{
-            _valueLab.text = [NSString stringWithFormat:@"%d",value*_step +_minValue];
+            _valueLab.text = [NSString stringWithFormat:@"%d",(int)(value*_step) +_minValue];
         }
     }
 }

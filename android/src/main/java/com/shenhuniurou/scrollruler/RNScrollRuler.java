@@ -519,9 +519,15 @@ public class RNScrollRuler extends View {
                 } else {
                     //绘制刻度，绘制刻度数字
                     canvas.drawLine(0, 0, 0, midScaleHeight, midScalePaint);
-                    scaleNumPaint.getTextBounds(num1 / scaleGap + minScale + "", 0, (num1 / scaleGap + minScale + "").length(), scaleNumRect);
-                    canvas.drawText((num1 / scaleCount + minScale) * scaleLimit + "", -scaleNumRect.width() / 2, lagScaleHeight +
-                            (rulerHeight - lagScaleHeight) / 2 + scaleNumRect.height(), scaleNumPaint);
+                    if (num1 == 0 && minScale == 0) {
+                        scaleNumPaint.getTextBounds("不设", 0, "不设".length(), scaleNumRect);
+                        canvas.drawText("不设", -scaleNumRect.width() / 2, lagScaleHeight +
+                                (rulerHeight - lagScaleHeight) / 2 + scaleNumRect.height(), scaleNumPaint);
+                    } else {
+                        scaleNumPaint.getTextBounds(num1 / scaleGap + minScale + "", 0, (num1 / scaleGap + minScale + "").length(), scaleNumRect);
+                        canvas.drawText((num1 / scaleCount + minScale) * scaleLimit + "", -scaleNumRect.width() / 2, lagScaleHeight +
+                                (rulerHeight - lagScaleHeight) / 2 + scaleNumRect.height(), scaleNumPaint);
+                    }
 
                 }
 
@@ -550,11 +556,20 @@ public class RNScrollRuler extends View {
             return;
         }
         canvas.translate(0, -resultNumRect.height() - rulerToResultgap / 2);  //移动画布到正确的位置来绘制结果值
-        resultNumPaint.getTextBounds(resultText, 0, resultText.length(), resultNumRect);
-        canvas.drawText(resultText, width / 2 - resultNumRect.width() / 2, resultNumRect.height(), //绘制当前刻度结果值
-                resultNumPaint);
-        resultNumRight = width / 2 + resultNumRect.width() / 2 + 5;
-        canvas.drawText(unit, resultNumRight, kgRect.height() + 8, kgPaint);            //在当前刻度结果值的又面10px的位置绘制单位
+        if (resultText.equals("0")) {
+            resultText = "不设";
+            resultNumPaint.setTextSize((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 16, getResources().getDisplayMetrics()));
+            resultNumPaint.getTextBounds(resultText, 0, resultText.length(), resultNumRect);
+            canvas.drawText(resultText, width / 2 - resultNumRect.width() / 2, resultNumRect.height(), //绘制当前刻度结果值
+                    resultNumPaint);
+        } else {
+            resultNumPaint.setTextSize((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 20, getResources().getDisplayMetrics()));
+            resultNumPaint.getTextBounds(resultText, 0, resultText.length(), resultNumRect);
+            canvas.drawText(resultText, width / 2 - resultNumRect.width() / 2, resultNumRect.height(), //绘制当前刻度结果值
+                    resultNumPaint);
+            resultNumRight = width / 2 + resultNumRect.width() / 2 + 5;
+            canvas.drawText(unit, resultNumRight, kgRect.height() + 8, kgPaint);            //在当前刻度结果值的又面10px的位置绘制单位
+        }
     }
 
     private void drawBg(Canvas canvas) {
